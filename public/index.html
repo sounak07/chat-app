@@ -3,21 +3,32 @@
   <head>
     <meta charset="utf-8">
     <title>Initial App</title>
+    <link rel="stylesheet" href="/css/style.css">
   </head>
-  <body>
-    <p>Welcome to chat app</p>
+  <body class="chat">
 
-    <ol id="messages">
+    <div class="chat__sidebar">
+      <h3>People</h3>
+      <div id="users"></div>
+    </div>
 
-    </ol>
+    <div class="chat__main">
+      <ol id="messages" class="chat__messages"></ol>
 
-    <form id="message-form">
+      <div class="chat__footer">
+        <form id="message-form">
+            <input name="message" type="text" placeholder="Type a message" autofocus autocomplete="off"/>
+            <button>Send</button>
+        </form>
+        <button id="send-location">Send location</button>
 
-        <input name="message" type="text" placeholder="Type a message"/>
-        <button>Send</button>
+      </div>
 
-    </form>
-    <button id="send-location">Send Location</button>
+
+
+    </div>
+
+
 
     <script
     src="https://code.jquery.com/jquery-3.3.1.js"
