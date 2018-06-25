@@ -172,13 +172,25 @@ button:disabled {
   color: #999;
 }
 
+
 @media (max-width: 600px) {
   * {
     font-size: 1rem;
   }
 
   .chat__sidebar {
-    display: none;
+    z-index: 10;
+    position: absolute;
+    /* This trasform moves the drawer off canvas. */
+    -webkit-transform: translate(-300px, 0);
+    transform: translate(-300px, 0);
+    /* Optionally, we animate the drawer. */
+    transition: transform 0.3s ease;
+  }
+
+  .chat__sidebar.open {
+    -webkit-transform: translate(0, 0);
+    transform: translate(0, 0);
   }
 
   .chat__footer {
@@ -192,4 +204,22 @@ button:disabled {
   .chat__footer button {
     margin-right: 0px;
   }
+
+  .header__menu {
+      display: inline-block;
+      position: absolute;
+      right: 0;
+      padding: 1em;
+    }
+    .header__menu svg {
+      width: 32px;
+      fill: black;
+    }
+
+}
+
+#locate {
+  text-decoration: none;
+  color:  #0000FF ;
+  font-style: italic;
 }

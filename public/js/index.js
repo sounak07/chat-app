@@ -7,21 +7,32 @@ socket.on('connect', function() {
 
 socket.on('newMessage',function (message){
   var formattedTime = moment(message.createdAt).format('hh:MM a');
-  var li = $('<li></li>');
-  li.text(`${message.from} ${formattedTime}: ${message.text}`);
+  var template = $('#message-template').html();
+  var html = Mustache.render(template,{
+    text: message.text,
+    from: message.from,
+    createdAt: formattedTime
+  });
 
-  $('#messages').append(li);
+  $('#messages').append(html);
 });
 
 socket.on('newLocationMessage',function(message){
   var formattedLocationTime = moment(message.createdAt).format('hh:MM a');
-  var li = $('<li></li>')
-  var a  = $('<a target="_blank">My current Location</a>');
+  var template = $('#location-template').html();
+  var html = Mustache.render(template,{
+    url: message.url,
+    from: message.from,
+    createdAt: formattedLocationTime
+  });
 
-  li.text(`${message.from} ${formattedLocationTime}: `);
-  a.attr(`href`, message.url);
-  li.append(a);
-  $('#messages').append(li);
+  // var li = $('<li></li>')
+  // var a  = $('<a target="_blank">My current Location</a>');
+  //
+  // li.text(`${message.from} ${formattedLocationTime}: `);
+  // a.attr(`href`, message.url);
+  // li.append(a);
+  $('#messages').append(html);
 });
 
 
@@ -64,4 +75,10 @@ locationButton.on('click', function() {
     alert('Unable to fetch location');
   });
 
+});
+
+
+//chat list
+$("#menu").on('click', function(){
+  $(".chat__sidebar").toggleClass("open");
 });
