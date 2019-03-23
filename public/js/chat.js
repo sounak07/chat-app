@@ -11,20 +11,20 @@ function scrollToButtom() {
   var newMessageHeight = newMessage.innerHeight();
   var lastMessageHeight = newMessage.prev().innerHeight();
 
-  if(clientHeight + scrollTop + newMessageHeight + lastMessageHeight >= scrollHeight){
+  if (clientHeight + scrollTop + newMessageHeight + lastMessageHeight >= scrollHeight) {
     messages.scrollTop(scrollHeight);
   }
 }
 
-socket.on('connect', function() {
+socket.on('connect', function () {
   console.log("Connected to server");
 });
 
 
-socket.on('newMessage',function (message){
+socket.on('newMessage', function (message) {
   var formattedTime = moment(message.createdAt).format('hh:MM a');
   var template = $('#message-template').html();
-  var html = Mustache.render(template,{
+  var html = Mustache.render(template, {
     text: message.text,
     from: message.from,
     createdAt: formattedTime
@@ -34,10 +34,10 @@ socket.on('newMessage',function (message){
   scrollToButtom();
 });
 
-socket.on('newLocationMessage',function(message){
+socket.on('newLocationMessage', function (message) {
   var formattedLocationTime = moment(message.createdAt).format('hh:MM a');
   var template = $('#location-template').html();
-  var html = Mustache.render(template,{
+  var html = Mustache.render(template, {
     url: message.url,
     from: message.from,
     createdAt: formattedLocationTime
@@ -54,41 +54,41 @@ socket.on('newLocationMessage',function(message){
 });
 
 
-socket.on('disconnect', function() {
+socket.on('disconnect', function () {
   console.log("Disconnected");
 });
 
 var messageTextbook = jQuery('[name=message]');
 
 $('#message-form').on('submit', function (e) {
-    e.preventDefault();
+  e.preventDefault();
 
-    socket.emit('createMessage',{
-      from: 'User',
-      text: messageTextbook.val()
-    }, function(){
-      messageTextbook.val('')
+  socket.emit('createMessage', {
+    from: 'User',
+    text: messageTextbook.val()
+  }, function () {
+    messageTextbook.val('')
   });
 });
 
 
 var locationButton = $('#send-location');
-locationButton.on('click', function() {
+locationButton.on('click', function () {
 
-  if(!navigator.geolocation){
+  if (!navigator.geolocation) {
     return alert("Geolocation is not supported");
   }
 
   locationButton.attr('disabled', 'disabled').text('Sending location...');
 
 
-  navigator.geolocation.getCurrentPosition(function (position){
+  navigator.geolocation.getCurrentPosition(function (position) {
     locationButton.removeAttr('disabled').text('Send location');
-      socket.emit('createLocationMessage',{
-        lat: position.coords.latitude,
-        lng: position.coords.longitude
-      });
-  }, function(){
+    socket.emit('createLocationMessage', {
+      lat: position.coords.latitude,
+      lng: position.coords.longitude
+    });
+  }, function () {
     locationButton.removeAttr('disabled').text('Send location');
     alert('Unable to fetch location');
   });
@@ -97,6 +97,6 @@ locationButton.on('click', function() {
 
 
 //chat list sidebar show/hide
-$("#menu").on('click', function(){
+$("#menu").on('click', function () {
   $(".chat__sidebar").toggleClass("open");
 });
