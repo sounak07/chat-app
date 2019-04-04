@@ -17,7 +17,16 @@ function scrollToButtom() {
 }
 
 socket.on('connect', function () {
-  console.log("Connected to server");
+  var params = jQuery.deparam(window.location.search);
+
+  socket.emit('join', params, function (err) {
+    if (err) {
+      alert(err);
+      window.location.href = '/';
+    } else {
+      console.log('No error')
+    }
+  })
 });
 
 
@@ -43,12 +52,6 @@ socket.on('newLocationMessage', function (message) {
     createdAt: formattedLocationTime
   });
 
-  // var li = $('<li></li>')
-  // var a  = $('<a target="_blank">My current Location</a>');
-  //
-  // li.text(`${message.from} ${formattedLocationTime}: `);
-  // a.attr(`href`, message.url);
-  // li.append(a);
   $('#messages').append(html);
   scrollToButtom();
 });
@@ -56,6 +59,17 @@ socket.on('newLocationMessage', function (message) {
 
 socket.on('disconnect', function () {
   console.log("Disconnected");
+});
+
+
+socket.on('updateUserList', function (users) {
+  var ol = jQuery('<ol></ol>');
+
+  users.forEach((user) => {
+    ol.append(jQuery('<li></li>').text(user));
+  })
+
+  jQuery('#users').html(ol);
 });
 
 var messageTextbook = jQuery('[name=message]');
